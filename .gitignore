@@ -2,3 +2,6 @@ JUCE
 .vs/**
 build/**
 out/**
+Projects/.vs/**
+Projects/x64/**
+Projects/Win32/**
