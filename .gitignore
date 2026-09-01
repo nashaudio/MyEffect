@@ -1,0 +1,4 @@
+JUCE
+.vs/**
+build/**
+out/**
