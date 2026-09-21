@@ -15,27 +15,20 @@
 MyEffect::MyEffect()
 {       
     //==========================================================================
-    // CONTROLS - Use this array to completely specify your UI
+    // PARAMETERS - Use this array to completely specify your UI
     // - tells the system what parameters you want, and how they are controlled
     // - add or remove parameters by adding or removing entries from the list
     // - each control should have an expressive label / caption
-    // - controls can be of different types: ROTARY, BUTTON, TOGGLE, SLIDER, or MENU (see definitions)
-    // - for rotary and linear sliders, you can set the range of values (make sure the initial value is inside the range)
-    // - for menus, replace the three numeric values with a single array of option strings: e.g. { "one", "two", "three" }
-    // - by default, the controls are laid out in a grid, but you can also move and size them manually
-    //   i.e. replace AUTO_SIZE with { 50,50,100,100 } to place a 100x100 control at (50,50)
+    // - controls can be of different types: Dial, Button, Toggle, Slider, or Menu (see definitions)
+    // - default ranges are 0.0 to 1.0, but you can specify different ranges for dials and sliders, plus an initial value
+    // - for menus, list the oprtions after the menu label: e.g. "one", "two", "three" 
+    // - by default, the controls are laid out in a 5x2 grid, but you can also move and size them manually
+    //   i.e. add { 50,50,100,100 } to place a 100x100 control at (50,50)
+    // - controls can be grouped together by adding them to a group { "Group Name", ... }, which can also be sized and positioned manually
 
     parameters = {
-        //  name,       type,              min, max, initial, size
-        { "Group", { Dial("One"), Dial("Two"), Dial("Three") }},
-        // Toggle("Param 2", 0),
-        // Menu("Param 3", "Option 1", "Option 2", "Option 3"),
-        // Dial("Param 4",  0.0, 1.0, 0.0),
-        // Dial("Param 5",  0.0, 1.0, 0.0),
-        // Dial("Param 6",  0.0, 1.0, 0.0),
-        // Dial("Param 7",  0.0, 1.0, 0.0),
-        // Dial("Param 8",  0.0, 1.0, 0.0),
-        // Dial("Param 9",  0.0, 1.0, 0.0),
+        Dial("Param 0"), Dial("Param 1"), Dial("Param 2"), Dial("Param 3"), Dial("Param 4"),
+        Dial("Param 5"), Dial("Param 6"), Dial("Param 7"), Dial("Param 8"), Dial("Param 9"),
     };
 
     presets = {
@@ -76,21 +69,16 @@ void MyEffect::process(const float** inputBuffers, float** outputBuffers, int nu
     const float* input[2]  = { inputBuffers[0],  inputBuffers[1] };
           float* output[2] = { outputBuffers[0], outputBuffers[1] };
     
-    //float fGain = parameters[0];
+    float gain = parameters[0];
     
     while(numSamples--)
     {
-        // input samples
-        float in0 = *input[0]++;
-        float in1 = *input[1]++;
-
-        // output samples
-        float &out0 = *output[0]++;
-        float &out1 = *output[1]++;
+        // input / output samples
+        float   in0 = *input[0]++,    in1 = *input[1]++;
+        float &out0 = *output[0]++, &out1 = *output[1]++;
         
         // Add your effect processing here
-        float noise = ((float)rand() / (float)RAND_MAX) * 0.1f - 0.05f; // random value between -0.05 and 0.05
-        out0 = in0 * parameters[0];
-        out1 = in1 * parameters[0];
+        out0 = in0 * gain;
+        out1 = in1 * gain;
     }
 }
