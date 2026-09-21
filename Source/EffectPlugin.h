@@ -8,10 +8,11 @@
 #pragma once
 
 // Directory scanned by the standalone app's simulated-input file player.
-// Relative paths are resolved from the directory containing the executable.
-inline constexpr const char* standaloneAudioFileDirectory = "../../Tests";
+// The harness searches for this directory from the executable and its parents,
+// so the same setting works for Visual Studio, Xcode and CMake builds.
+inline constexpr const char* standaloneAudioFileDirectory = "Tests";
 
-#include "dsp.h"
+#include <dsp.h>
 using namespace DSP;
 
 #include "EffectExtra.h"

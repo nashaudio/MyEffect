@@ -1,0 +1,32 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 25,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "student",
+            "displayName": "MyEffect",
+            "description": "Configure the student project inside the disposable Build directory.",
+            "binaryDir": "${sourceDir}/Build/CMake",
+            "cacheVariables": {
+                "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "student-debug",
+            "configurePreset": "student",
+            "configuration": "Debug"
+        },
+        {
+            "name": "student-release",
+            "configurePreset": "student",
+            "configuration": "Release"
+        }
+    ]
+}
