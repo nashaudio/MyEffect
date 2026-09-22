@@ -1,0 +1,96 @@
+{
+    "folders": [
+        {
+            "name": "MyEffect",
+            "path": ".."
+        }
+    ],
+    "settings": {
+        "cmake.useCMakePresets": "always",
+        "cmake.configureOnOpen": true,
+        "cmake.sourceDirectory": "${workspaceFolder:MyEffect}",
+        "files.exclude": {
+            "**/.git": true,
+            "**/.vs": true,
+            "Build": true,
+            "Framework": false,
+            "Legacy": true
+        },
+        "search.exclude": {
+            "Build": true,
+            "Framework": false,
+            "Legacy": true,
+            "Projects": true
+        },
+        "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+        "C_Cpp.default.includePath": [
+            "${workspaceFolder:MyEffect}/Framework/include"
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Run MyEffect (Debug)",
+                "type": "cppvsdbg",
+                "request": "launch",
+                "program": "${workspaceFolder:MyEffect}/Build/Products/Debug/MyEffect.exe",
+                "cwd": "${workspaceFolder:MyEffect}",
+                "preLaunchTask": "Build MyEffect (Debug)"
+            },
+            {
+                "name": "Run MyEffect (Release)",
+                "type": "cppvsdbg",
+                "request": "launch",
+                "program": "${workspaceFolder:MyEffect}/Build/Products/Release/MyEffect.exe",
+                "cwd": "${workspaceFolder:MyEffect}",
+                "preLaunchTask": "Build MyEffect (Release)"
+            }
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Configure MyEffect",
+                "type": "process",
+                "command": "cmake",
+                "args": ["--preset", "development"],
+                "options": {
+                    "cwd": "${workspaceFolder:MyEffect}"
+                },
+                "problemMatcher": []
+            },
+            {
+                "label": "Build MyEffect (Debug)",
+                "type": "process",
+                "command": "cmake",
+                "args": ["--build", "--preset", "development-debug", "--target", "MyEffect_Standalone"],
+                "options": {
+                    "cwd": "${workspaceFolder:MyEffect}"
+                },
+                "group": {
+                    "kind": "build",
+                    "isDefault": true
+                },
+                "problemMatcher": "$msCompile"
+            },
+            {
+                "label": "Build MyEffect (Release)",
+                "type": "process",
+                "command": "cmake",
+                "args": ["--build", "--preset", "development-release", "--target", "MyEffect_Standalone"],
+                "options": {
+                    "cwd": "${workspaceFolder:MyEffect}"
+                },
+                "problemMatcher": "$msCompile"
+            }
+        ]
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.cmake-tools",
+            "ms-vscode.cpptools"
+        ]
+    }
+}

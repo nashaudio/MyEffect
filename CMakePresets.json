@@ -1,0 +1,32 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 25,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "development",
+            "displayName": "MyEffect",
+            "description": "Configure MyEffect inside the disposable Build directory.",
+            "binaryDir": "${sourceDir}/Build/CMake",
+            "cacheVariables": {
+                "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "development-debug",
+            "configurePreset": "development",
+            "configuration": "Debug"
+        },
+        {
+            "name": "development-release",
+            "configurePreset": "development",
+            "configuration": "Release"
+        }
+    ]
+}

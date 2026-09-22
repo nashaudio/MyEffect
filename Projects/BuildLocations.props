@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)..\Build\VisualStudio\Products\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(SolutionDir)..\Build\VisualStudio\Intermediates\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>$(SolutionDir)..\Build\VisualStudio\Products\x64\$(Configuration)\MyEffect;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Source;$(SolutionDir)..\Framework\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

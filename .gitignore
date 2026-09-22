@@ -1,0 +1,23 @@
+# The entire generated build tree is disposable.
+/Build/
+
+# IDE state is local to each student and machine.
+/.vs/
+**/.vs/
+*.suo
+*.user
+*.vcxproj.user
+*.VC.db
+*.opendb
+**/xcuserdata/
+*.xcuserstate
+
+# Keep shared presets, but not personal CMake overrides.
+CMakeUserPresets.json
+
+# Operating-system metadata.
+.DS_Store
+Thumbs.db
+
+# Standalone runtime diagnostics.
+/debug.log
