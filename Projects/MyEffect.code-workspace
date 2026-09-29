@@ -45,6 +45,24 @@
                 "program": "${workspaceFolder:MyEffect}/Build/Products/Release/MyEffect.exe",
                 "cwd": "${workspaceFolder:MyEffect}",
                 "preLaunchTask": "Build MyEffect (Release)"
+            },
+            {
+                "name": "Run MyEffect (Debug, macOS)",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder:MyEffect}/Build/Products/Debug/MyEffect.app/Contents/MacOS/MyEffect",
+                "cwd": "${workspaceFolder:MyEffect}",
+                "MIMode": "lldb",
+                "preLaunchTask": "Build MyEffect (Debug)"
+            },
+            {
+                "name": "Run MyEffect (Release, macOS)",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder:MyEffect}/Build/Products/Release/MyEffect.app/Contents/MacOS/MyEffect",
+                "cwd": "${workspaceFolder:MyEffect}",
+                "MIMode": "lldb",
+                "preLaunchTask": "Build MyEffect (Release)"
             }
         ]
     },

@@ -116,10 +116,7 @@ bool PluginProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
     juce::ignoreUnused (layouts);
     return true;
   #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
         return false;
 
     // This checks if the input layout matches the output layout
@@ -187,17 +184,34 @@ juce::AudioProcessorEditor* PluginProcessor::createEditor()
 //==============================================================================
 void PluginProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
-    juce::ignoreUnused (destData);
+    juce::ValueTree state ("MyEffectState");
+    const auto& parameters = effect->parameters;
+
+    for (unsigned int index = 0; index < parameters.count; ++index)
+        state.setProperty ("parameter" + juce::String (index),
+                           static_cast<float> (parameters[index]), nullptr);
+
+    if (auto xml = state.createXml())
+        copyXmlToBinary (*xml, destData);
 }
 
 void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
-    juce::ignoreUnused (data, sizeInBytes);
+    const auto xml = getXmlFromBinary (data, sizeInBytes);
+
+    if (xml == nullptr || ! xml->hasTagName ("MyEffectState"))
+        return;
+
+    const auto state = juce::ValueTree::fromXml (*xml);
+    auto& parameters = effect->parameters;
+
+    for (unsigned int index = 0; index < parameters.count; ++index)
+    {
+        const auto property = juce::Identifier ("parameter" + juce::String (index));
+
+        if (state.hasProperty (property))
+            parameters[index].set (static_cast<float> (state[property]));
+    }
 }
 
 //==============================================================================

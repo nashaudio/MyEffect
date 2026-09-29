@@ -202,6 +202,7 @@ void PluginEditor::setParameters(MiniPlugin::Parameters* pparams) {
             pSlider->setColour(juce::Slider::thumbColourId, parameter.type == DSP::Parameter::METER ? Colour(255,255,255) : Colour(255,255,255));
             pSlider->setColour(juce::Slider::rotarySliderFillColourId, Colour(255,255,255));
             pSlider->setDoubleClickReturnValue(true, parameter.initial);
+            pSlider->setValue (static_cast<float> (parameter), dontSendNotification);
             
             // add a label
             labels[c]->setInterceptsMouseClicks(false, false);
@@ -224,6 +225,8 @@ void PluginEditor::setParameters(MiniPlugin::Parameters* pparams) {
             pButton->addListener (this);
             pButton->setButtonText(parameter.name.c_str());
             pButton->setClickingTogglesState(parameter.type == DSP::Parameter::TOGGLE);
+            pButton->setToggleState (static_cast<float> (parameter) >= 0.5f,
+                                     dontSendNotification);
 
             pButton->setColour(TextButton::buttonColourId, Colour(255,255,255));
             pButton->setColour(TextButton::buttonOnColourId, klangblue);
@@ -238,6 +241,8 @@ void PluginEditor::setParameters(MiniPlugin::Parameters* pparams) {
                 pList->addItem(parameter.options[i].c_str(), i+1);
             pList->addListener (this);
             pList->setColour(ComboBox::buttonColourId, Colour(192,192,192));
+            pList->setSelectedId (juce::roundToInt (static_cast<float> (parameter)) + 1,
+                                  dontSendNotification);
             
             // add a label
             labels[c]->setText(parameter.name.c_str(), dontSendNotification);
