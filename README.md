@@ -19,13 +19,21 @@ template.
 - Xcode: `Projects/MyEffect.xcodeproj`
 - Visual Studio Code: `Projects/MyEffect.code-workspace`
 
-The VS Code workspace uses `CMakePresets.json`. From a terminal, the same
-workflow is:
+The VS Code workspace uses `CMakePresets.json`. Install CMake 3.25 or newer
+and Ninja; on macOS, also install Xcode and select it with `xcode-select`.
+The presets use Ninja Multi-Config so Debug and Release share a build tree
+and the requested configuration is respected on every platform. From a terminal:
 
 ```text
 cmake --preset development
 cmake --build --preset development-debug
+cmake --build --preset development-release
 ```
+
+If `Build/CMake` was configured with another generator, delete that generated
+directory and configure again (JUCE also caches its helper generator). On macOS the
+standalone app, VST3 and AU bundles are written to `Build/Products/Debug`
+or `Build/Products/Release` (VST3 bundles are in the `VST3` subdirectory).
 
 All generated binaries and intermediate files belong under `Build`. It is
 always safe to close the IDE and delete that directory to force a clean build.

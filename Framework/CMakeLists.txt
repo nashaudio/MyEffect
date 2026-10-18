@@ -71,10 +71,11 @@ target_compile_features(${MYEFFECT_TARGET} PRIVATE cxx_std_17)
 
 # Keep final products together; CMake's own intermediates remain beneath
 # Build/CMake as selected by CMakePresets.json.
+# Preserve JUCE's VST3 output layout: its packaging and manifest commands use
+# that layout, including platform-specific bundle subdirectories.
 foreach(target
         ${MYEFFECT_TARGET}
         ${MYEFFECT_TARGET}_Standalone
-        ${MYEFFECT_TARGET}_VST3
         ${MYEFFECT_TARGET}_AU)
     if(TARGET ${target})
         set_target_properties(${target} PROPERTIES

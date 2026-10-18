@@ -209,10 +209,10 @@ void PluginEditor::setParameters(MiniPlugin::Parameters* pparams) {
             labels[c]->setText(parameter.name.c_str(), dontSendNotification);
             labels[c]->attachToComponent(components[c], false);
             if(parameter.type == DSP::Parameter::WHEEL){
-                labels[c]->setFont (Font (13.0f, Font::bold));
+                labels[c]->setFont (FontOptions (13.0f, Font::bold));
                 labels[c]->setColour(Label::textColourId, Colour(128,128,128));
             }else{
-                labels[c]->setFont (Font (13.0f));
+                labels[c]->setFont (FontOptions (13.0f));
             }
             labels[c]->setJustificationType(Justification::centred);
         } break;
@@ -247,9 +247,11 @@ void PluginEditor::setParameters(MiniPlugin::Parameters* pparams) {
             // add a label
             labels[c]->setText(parameter.name.c_str(), dontSendNotification);
             labels[c]->attachToComponent(components[c], false);
-            labels[c]->setFont (Font (13.0f));
+            labels[c]->setFont (FontOptions (13.0f));
             labels[c]->setJustificationType(Justification::centred);
         }
+        default:
+            break;
         }
 
         // labels[c]->setLookAndFeel(&pluginLF);
@@ -318,7 +320,7 @@ void PluginEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     // g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
-    auto area = getLocalBounds();
+//    auto area = getLocalBounds();
     g.setColour (juce::Colours::white);
     g.setFont (16.0f);
 
@@ -336,7 +338,7 @@ void PluginEditor::paint (juce::Graphics& g)
             g.fillRoundedRectangle(bounds, 3.f);
 
             g.setColour(Colours::white.withAlpha(0.8f));
-            g.setFont(Font(11.f, Font::bold));
+            g.setFont(FontOptions(11.f, Font::bold));
             g.drawText(group.name.c_str(), bounds.withTrimmedTop(2.5f), Justification::centredTop, false);
 
             bounds.setTop(bounds.getY() + 15.f);
@@ -386,6 +388,8 @@ void PluginEditor::resized()
                 break;
             case DSP::Parameter::MENU:
                 size.setBounds(offset.x + 75 * column, offset.y + 115 * row, 75, 30);
+                break;
+            default:
                 break;
             }
         }else{

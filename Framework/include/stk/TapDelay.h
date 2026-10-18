@@ -166,7 +166,7 @@ inline StkFrames& TapDelay :: tick( StkFrames& frames, unsigned int channel )
 
   StkFloat *iSamples = &frames[channel];
   StkFloat *oSamples = &frames[0];
-  unsigned int j, iHop = frames.channels(), oHop = frames.channels() - outPoint_.size();
+  unsigned long j, iHop = frames.channels(), oHop = frames.channels() - outPoint_.size();
   for ( unsigned int i=0; i<frames.frames(); i++, iSamples += iHop, oSamples += oHop ) {
     inputs_[inPoint_++] = *iSamples * gain_;
     if ( inPoint_ == inputs_.size() ) inPoint_ = 0;
@@ -196,7 +196,7 @@ inline StkFrames& TapDelay :: tick( StkFrames& iFrames, StkFrames& oFrames, unsi
 
   StkFloat *iSamples = &iFrames[iChannel];
   StkFloat *oSamples = &oFrames[0];
-  unsigned int j, iHop = iFrames.channels(), oHop = oFrames.channels() - outPoint_.size();
+  unsigned long j, iHop = iFrames.channels(), oHop = oFrames.channels() - outPoint_.size();
   for ( unsigned int i=0; i<iFrames.frames(); i++, iSamples += iHop, oSamples += oHop ) {
     inputs_[inPoint_++] = *iSamples * gain_;
     if ( inPoint_ == inputs_.size() ) inPoint_ = 0;

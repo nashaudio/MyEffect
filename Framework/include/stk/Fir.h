@@ -88,7 +88,7 @@ inline StkFloat Fir :: tick( StkFloat input )
   lastFrame_[0] = 0.0;
   inputs_[0] = gain_ * input;
 
-  for ( unsigned int i=b_.size()-1; i>0; i-- ) {
+  for ( unsigned long i=b_.size()-1; i>0; i-- ) {
     lastFrame_[0] += b_[i] * inputs_[i];
     inputs_[i] = inputs_[i-1];
   }
@@ -107,7 +107,7 @@ inline StkFrames& Fir :: tick( StkFrames& frames, unsigned int channel )
 #endif
 
   StkFloat *samples = &frames[channel];
-  unsigned int i, hop = frames.channels();
+  unsigned long i, hop = frames.channels();
   for ( unsigned int j=0; j<frames.frames(); j++, samples += hop ) {
     inputs_[0] = gain_ * *samples;
     *samples = 0.0;
@@ -134,7 +134,7 @@ inline StkFrames& Fir :: tick( StkFrames& iFrames, StkFrames& oFrames, unsigned 
 
   StkFloat *iSamples = &iFrames[iChannel];
   StkFloat *oSamples = &oFrames[oChannel];
-  unsigned int i, iHop = iFrames.channels(), oHop = oFrames.channels();
+  unsigned long i, iHop = iFrames.channels(), oHop = oFrames.channels();
   for ( unsigned int j=0; j<iFrames.frames(); j++, iSamples += iHop, oSamples += oHop ) {
     inputs_[0] = gain_ * *iSamples;
     *oSamples = 0.0;

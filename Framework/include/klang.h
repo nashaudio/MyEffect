@@ -26,6 +26,8 @@
 
 #define HAS_KLANG 1
 
+#undef Point
+
 #pragma once
 
 #ifdef __wasm__

@@ -10,6 +10,7 @@
             "name": "development",
             "displayName": "MyEffect",
             "description": "Configure MyEffect inside the disposable Build directory.",
+            "generator": "Ninja Multi-Config",
             "binaryDir": "${sourceDir}/Build/CMake",
             "cacheVariables": {
                 "CMAKE_CONFIGURATION_TYPES": "Debug;Release",
