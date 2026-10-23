@@ -4,6 +4,9 @@
     <Filter Include="MyEffect">
       <UniqueIdentifier>{4DA6655F-E6AE-7C34-E918-458B74B31B13}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyEffect\Source">
+      <UniqueIdentifier>{3B8E5C71-9A42-4D6F-8E10-5C2A7F4B9D33}</UniqueIdentifier>
+    </Filter>
     <Filter Include="JUCE Library Code">
       <UniqueIdentifier>{7ED5A90E-41AF-A1EF-659B-37CEEAB9BA61}</UniqueIdentifier>
     </Filter>
@@ -17,6 +20,12 @@
     </ClCompile>
     <ClCompile Include="..\Framework\source\PluginProcessor.cpp">
       <Filter>MyEffect\Wrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\EffectPlugin.cpp">
+      <Filter>MyEffect\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\EffectExtra.cpp">
+      <Filter>MyEffect\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\Framework\JuceLibraryCode\include_juce_audio_basics.cpp">
       <Filter>JUCE Library Code</Filter>
@@ -115,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="..\Framework\source\PluginProcessor.h">
       <Filter>MyEffect\Wrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\EffectPlugin.h">
+      <Filter>MyEffect\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\EffectExtra.h">
+      <Filter>MyEffect\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\Framework\JuceLibraryCode\JuceHeader.h">
       <Filter>JUCE Library Code</Filter>

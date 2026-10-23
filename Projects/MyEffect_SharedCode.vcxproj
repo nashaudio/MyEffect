@@ -145,6 +145,12 @@
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</BasicRuntimeChecks>
     </ClCompile>
     <ClCompile Include="..\Framework\source\PluginProcessor.cpp" />
+    <ClCompile Include="..\Source\EffectPlugin.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\Source\EffectExtra.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\Framework\JuceLibraryCode\include_juce_audio_basics.cpp" />
     <ClCompile Include="..\Framework\JuceLibraryCode\include_juce_audio_devices.cpp" />
     <ClCompile Include="..\Framework\JuceLibraryCode\include_juce_audio_formats.cpp" />
@@ -189,6 +195,8 @@
   <ItemGroup>
     <ClInclude Include="..\Framework\source\PluginEditor.h" />
     <ClInclude Include="..\Framework\source\PluginProcessor.h" />
+    <ClInclude Include="..\Source\EffectPlugin.h" />
+    <ClInclude Include="..\Source\EffectExtra.h" />
     <ClInclude Include="..\Framework\JuceLibraryCode\JuceHeader.h" />
     <ClInclude Include="..\Framework\JuceLibraryCode\JucePluginDefines.h" />
   </ItemGroup>
