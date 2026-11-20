@@ -40,5 +40,5 @@
 #define Component juce::Component
 
 #if JUCE_MAC
- #define Point juce::Point
+// #define Point juce::Point
 #endif
