@@ -1048,7 +1048,7 @@
 				INFOPLIST_FILE = "Info-Standalone_Plugin.plist";
 				INFOPLIST_PREPROCESS = NO;
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -1070,7 +1070,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEAD_CODE_STRIPPING = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -1079,7 +1079,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEAD_CODE_STRIPPING = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -1191,7 +1191,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/VST3";
 				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -1317,7 +1317,7 @@
 				);
 				INFOPLIST_FILE = "Info-Standalone_Plugin.plist";
 				INFOPLIST_PREPROCESS = NO;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -1440,7 +1440,7 @@
 				);
 				INFOPLIST_FILE = "Info-VST3_Manifest_Helper.plist";
 				INFOPLIST_PREPROCESS = NO;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -1560,7 +1560,7 @@
 					"$(inherited)",
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -1738,7 +1738,7 @@
 				INFOPLIST_FILE = "Info-VST3_Manifest_Helper.plist";
 				INFOPLIST_PREPROCESS = NO;
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -1861,7 +1861,7 @@
 				INFOPLIST_PREPROCESS = NO;
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/VST3";
 				LIBRARY_STYLE = Bundle;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -2046,7 +2046,7 @@
 				INFOPLIST_PREPROCESS = NO;
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/Components";
 				LIBRARY_STYLE = Bundle;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -2171,7 +2171,7 @@
 				);
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
@@ -2294,7 +2294,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Audio/Plug-Ins/Components";
 				LIBRARY_STYLE = Bundle;
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_HEADER_SEARCH_PATHS = "$(SRCROOT)/../Framework/JUCE/modules/juce_audio_processors_headless/format_types/VST3_SDK $(SRCROOT)/../JuceLibraryCode $(SRCROOT)/../Framework/JUCE/modules $(SRCROOT)/../Framework/modules $(SRCROOT)/../Framework/JUCE/modules/juce_audio_plugin_client/AU";
 				OBJROOT = "$(PROJECT_DIR)/../Build/Xcode/Intermediates";
 				OTHER_CFLAGS = "$(inherited)";
