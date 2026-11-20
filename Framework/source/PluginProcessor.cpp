@@ -2,6 +2,13 @@
 #include "PluginEditor.h"
 #include "../../Source/EffectPlugin.h"
 
+#include <cmath>
+#include <iomanip>
+#include <limits>
+#include <locale>
+#include <sstream>
+#include <vector>
+
 // Keep the effect implementation identical for the supplied VS/Xcode projects
 // and the CMake build. These are the default DSP translation units.
 #include "../../Source/EffectExtra.cpp"
@@ -68,25 +75,52 @@ double PluginProcessor::getTailLengthSeconds() const
 
 int PluginProcessor::getNumPrograms()
 {
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
+    return 1 + static_cast<int> (effect->presets.count);
 }
 
 int PluginProcessor::getCurrentProgram()
 {
-    return 0;
+    return currentProgram.load (std::memory_order_acquire);
 }
 
 void PluginProcessor::setCurrentProgram (int index)
 {
-    juce::ignoreUnused (index);
+    if (! juce::isPositiveAndBelow (index, getNumPrograms()))
+        return;
+
+    {
+        const juce::ScopedLock lock (getCallbackLock());
+        auto& parameters = effect->parameters;
+
+        if (index == 0)
+        {
+            for (unsigned int p = 0; p < parameters.count; ++p)
+                parameters[p].set (parameters[p].initial);
+        }
+        else
+        {
+            const auto& preset = effect->presets[index - 1];
+            for (unsigned int p = 0; p < juce::jmin (parameters.count, preset.values.count); ++p)
+                parameters[p].set (preset.values[p]);
+        }
+
+        currentProgram.store (index, std::memory_order_release);
+        effect->onPreset (index - 1);
+        effect->presetLoaded (index - 1, getProgramName (index).toRawUTF8());
+    }
+
+    updateHostDisplay (juce::AudioProcessorListener::ChangeDetails{}.withProgramChanged (true));
 }
 
 const juce::String PluginProcessor::getProgramName (int index)
 {
-    juce::ignoreUnused (index);
-    // Steinberg's VST3 validator fails plugins whose single default program has no name
-    return "Default";
+    if (index == 0)
+        return "Default";
+
+    if (juce::isPositiveAndBelow (index, getNumPrograms()))
+        return effect->presets[index - 1].name.c_str();
+
+    return {};
 }
 
 void PluginProcessor::changeProgramName (int index, const juce::String& newName)
@@ -184,7 +218,9 @@ juce::AudioProcessorEditor* PluginProcessor::createEditor()
 //==============================================================================
 void PluginProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
+    const juce::ScopedLock lock (getCallbackLock());
     juce::ValueTree state ("MyEffectState");
+    state.setProperty ("program", getCurrentProgram(), nullptr);
     const auto& parameters = effect->parameters;
 
     for (unsigned int index = 0; index < parameters.count; ++index)
@@ -203,15 +239,69 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
         return;
 
     const auto state = juce::ValueTree::fromXml (*xml);
-    auto& parameters = effect->parameters;
-
-    for (unsigned int index = 0; index < parameters.count; ++index)
     {
-        const auto property = juce::Identifier ("parameter" + juce::String (index));
+        const juce::ScopedLock lock (getCallbackLock());
+        auto& parameters = effect->parameters;
 
-        if (state.hasProperty (property))
-            parameters[index].set (static_cast<float> (state[property]));
+        for (unsigned int index = 0; index < parameters.count; ++index)
+        {
+            const auto property = juce::Identifier ("parameter" + juce::String (index));
+
+            if (state.hasProperty (property))
+                parameters[index].set (static_cast<float> (state[property]));
+        }
+
+        currentProgram.store (juce::jlimit (0, getNumPrograms() - 1,
+                                           static_cast<int> (state.getProperty ("program", 0))),
+                              std::memory_order_release);
     }
+
+    updateHostDisplay (juce::AudioProcessorListener::ChangeDetails{}.withProgramChanged (true));
+}
+
+std::string PluginProcessor::getStandaloneSettingsText() const
+{
+    std::vector<float> values;
+    values.reserve (effect->parameters.count);
+
+    {
+        const juce::ScopedLock lock (getCallbackLock());
+        for (unsigned int p = 0; p < effect->parameters.count; ++p)
+        {
+            const auto& parameter = effect->parameters[p];
+            values.push_back (parameter.type == DSP::Parameter::METER || parameter.type == DSP::Parameter::BUTTON
+                                  ? 0.f : static_cast<float> (parameter));
+        }
+    }
+
+    std::ostringstream text;
+    text.imbue (std::locale::classic());
+    text << "{ \"Copied Preset\", { ";
+
+    for (std::size_t i = 0; i < values.size(); ++i)
+    {
+        if (i != 0)
+            text << ", ";
+
+        const auto value = values[i];
+        if (! std::isfinite (value))
+            text << "0";
+        else if (value == 0.f && std::signbit (value))
+            text << "-0.f";
+        else
+        {
+            std::ostringstream literal;
+            literal.imbue (std::locale::classic());
+            literal << std::setprecision (std::numeric_limits<float>::max_digits10) << value;
+            const auto scalar = literal.str();
+            text << scalar;
+            if (scalar.find_first_of (".eE") != std::string::npos)
+                text << 'f';
+        }
+    }
+
+    text << " } },";
+    return text.str();
 }
 
 //==============================================================================

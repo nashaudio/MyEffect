@@ -10,9 +10,12 @@ class AnalysisWindow;
 
 //==============================================================================
 class PluginEditor : public AudioProcessorEditor,
+                     public StandaloneHarnessEditor,
                      public Slider::Listener,
                      public ComboBox::Listener,
-                     public Button::Listener
+                     public Button::Listener,
+                     private AudioProcessorListener,
+                     private AsyncUpdater
 {
 public:
     explicit PluginEditor (PluginProcessor&);
@@ -29,8 +32,12 @@ public:
     void buttonClicked (Button*) override;
     void buttonStateChanged (Button*) override;
     void handleCommandMessage (int commandId) override;
+    bool areStandaloneToolsExpanded() const noexcept override;
 
 private:
+    void audioProcessorParameterChanged (AudioProcessor*, int, float) override;
+    void audioProcessorChanged (AudioProcessor*, const AudioProcessorListener::ChangeDetails&) override;
+    void handleAsyncUpdate() override;
     void toggleAnalysisTools();
     void toggleAnalysisDetached();
     void updateAnalysisLayout();

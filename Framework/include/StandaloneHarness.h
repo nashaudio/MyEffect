@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 // Optional control surface implemented by the MyEffect adapter and discovered
 // by JUCE's standalone wrapper. Keeping this interface independent of JUCE
 // lets the harness bypass only the effect DSP while preserving file playback and
@@ -11,4 +13,12 @@ public:
 
     virtual void setStandaloneHarnessBypassed (bool shouldBypass) noexcept = 0;
     virtual bool isStandaloneHarnessBypassed() const noexcept = 0;
+    virtual std::string getStandaloneSettingsText() const = 0;
+};
+
+class StandaloneHarnessEditor
+{
+public:
+    virtual ~StandaloneHarnessEditor() = default;
+    virtual bool areStandaloneToolsExpanded() const noexcept = 0;
 };

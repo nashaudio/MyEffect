@@ -54,10 +54,12 @@ public:
     {
         return standaloneHarnessBypassed.load (std::memory_order_acquire);
     }
+    std::string getStandaloneSettingsText() const override;
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 
     MiniPlugin::Effect* effect = nullptr;
     AnalysisBuffer analysisBuffer;
     std::atomic<bool> standaloneHarnessBypassed { false };
+    std::atomic<int> currentProgram { 0 };
 };

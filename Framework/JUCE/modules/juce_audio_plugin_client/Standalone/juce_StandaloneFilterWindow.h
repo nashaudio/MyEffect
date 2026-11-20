@@ -1032,7 +1032,9 @@ private:
 
     private:
         //==============================================================================
-        class NotificationArea : public Component
+        class NotificationArea : public Component,
+                                 private AudioProcessorListener,
+                                 private AsyncUpdater
         {
         public:
             enum { height = 30 };
@@ -1048,7 +1050,7 @@ private:
                  #endif
                 , holder (holderIn), toolsCallback (std::move (toolsCallbackIn)),
                   playButton ("Play"), stopButton ("Stop"), bypassButton ("Bypass")
-                , toolsButton ("Tools")
+                , toolsButton ("Tools >"), copySettingsButton ("Copy Settings")
             {
                 setOpaque (true);
 
@@ -1081,6 +1083,23 @@ private:
                         toolsCallback();
                 };
 
+                presetsLabel.setText ("Presets", dontSendNotification);
+                presetsLabel.setColour (Label::textColourId, Colours::black);
+                presetSelector.setTextWhenNoChoicesAvailable ("(no presets)");
+                for (int i = 0; i < holder.processor->getNumPrograms(); ++i)
+                    presetSelector.addItem (holder.processor->getProgramName (i), i + 1);
+                presetSelector.setSelectedItemIndex (holder.processor->getCurrentProgram(), dontSendNotification);
+                presetSelector.onChange = [this]
+                {
+                    holder.processor->setCurrentProgram (presetSelector.getSelectedItemIndex());
+                };
+                copySettingsButton.onClick = [this]
+                {
+                    if (auto* control = dynamic_cast<StandaloneHarnessControl*> (holder.processor.get()))
+                        SystemClipboard::copyTextToClipboard (String (control->getStandaloneSettingsText()));
+                };
+                holder.processor->addListener (this);
+
                 audioFiles = holder.getStandaloneAudioFiles();
 
                 for (int i = 0; i < audioFiles.size(); ++i)
@@ -1095,7 +1114,25 @@ private:
                 addAndMakeVisible (stopButton);
                 addAndMakeVisible (bypassButton);
                 addAndMakeVisible (toolsButton);
+                addChildComponent (presetsLabel);
+                addChildComponent (presetSelector);
+                addChildComponent (copySettingsButton);
                 // addAndMakeVisible (settingsButton);
+            }
+
+            ~NotificationArea() override
+            {
+                holder.processor->removeListener (this);
+                cancelPendingUpdate();
+            }
+
+            void setExpanded (bool expanded)
+            {
+                toolsButton.setButtonText (expanded ? "< Tools" : "Tools >");
+                presetsLabel.setVisible (expanded);
+                presetSelector.setVisible (expanded);
+                copySettingsButton.setVisible (expanded);
+                resized();
             }
 
             void paint (Graphics& g) override
@@ -1117,12 +1154,31 @@ private:
                 fileSelector.setBounds (r.removeFromLeft (jmin (180, r.getWidth())).reduced (2, 0));
                 playButton.setBounds (r.removeFromLeft (46).reduced (2, 0));
                 stopButton.setBounds (r.removeFromLeft (46).reduced (2, 0));
-                toolsButton.setBounds (r.removeFromRight (90).reduced (2, 0));
+                toolsButton.setBounds (r.removeFromLeft (58).reduced (2, 0));
+
+                // Align the caption text with the Oscilloscope tab below.
+                r.removeFromLeft (12);
+                presetsLabel.setBounds (r.removeFromLeft (54));
+                presetSelector.setBounds (r.removeFromLeft (200).reduced (2, 0));
+                r.removeFromLeft (6);
+                copySettingsButton.setBounds (r.removeFromLeft (112).reduced (2, 0));
 
                 // settingsButton.setBounds (r.removeFromRight (70));
                 // notification.setBounds (r);
             }
         private:
+            void audioProcessorParameterChanged (AudioProcessor*, int, float) override {}
+
+            void audioProcessorChanged (AudioProcessor*, const AudioProcessorListener::ChangeDetails&) override
+            {
+                triggerAsyncUpdate();
+            }
+
+            void handleAsyncUpdate() override
+            {
+                presetSelector.setSelectedItemIndex (holder.processor->getCurrentProgram(), dontSendNotification);
+            }
+
             StandalonePluginHolder& holder;
             std::function<void()> toolsCallback;
             Array<File> audioFiles;
@@ -1131,6 +1187,9 @@ private:
             TextButton playButton, stopButton;
             TextButton bypassButton;
             TextButton toolsButton;
+            Label presetsLabel;
+            ComboBox presetSelector;
+            TextButton copySettingsButton;
             TextButton settingsButton;
         };
 
@@ -1188,6 +1247,9 @@ private:
 
             if (editor != nullptr)
             {
+                if (auto* tools = dynamic_cast<StandaloneHarnessEditor*> (editor.get()))
+                    notification.setExpanded (tools->areStandaloneToolsExpanded());
+
                 auto rect = getSizeToContainEditor();
 
                 setSize (rect.getWidth(),

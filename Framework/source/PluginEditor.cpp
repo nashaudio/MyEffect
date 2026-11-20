@@ -47,10 +47,14 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
     MiniPlugin::Effect* effect = p.getEffect();
     setParameters(&effect->parameters);
+    p.addListener (this);
 }
 
 PluginEditor::~PluginEditor()
 {
+    getAudioProcessor()->removeListener (this);
+    cancelPendingUpdate();
+
     if (analysisWindow != nullptr)
         analysisWindow->clearContentComponent();
 
@@ -91,6 +95,35 @@ void PluginEditor::toggleAnalysisTools()
     updateAnalysisLayout();
 }
 
+bool PluginEditor::areStandaloneToolsExpanded() const noexcept
+{
+    return analysisVisible && analysisWindow == nullptr;
+}
+
+void PluginEditor::audioProcessorParameterChanged (AudioProcessor*, int, float)
+{
+    triggerAsyncUpdate();
+}
+
+void PluginEditor::audioProcessorChanged (AudioProcessor*, const AudioProcessorListener::ChangeDetails&)
+{
+    triggerAsyncUpdate();
+}
+
+void PluginEditor::handleAsyncUpdate()
+{
+    for (int c = 0; c < components.size(); ++c)
+    {
+        const auto value = static_cast<float> ((*parameters)[c]);
+        if (auto* slider = dynamic_cast<Slider*> (components[c]))
+            slider->setValue (value, dontSendNotification);
+        else if (auto* button = dynamic_cast<Button*> (components[c]))
+            button->setToggleState (value >= 0.5f, dontSendNotification);
+        else if (auto* menu = dynamic_cast<ComboBox*> (components[c]))
+            menu->setSelectedId (roundToInt (value) + 1, dontSendNotification);
+    }
+}
+
 void PluginEditor::toggleAnalysisDetached()
 {
     if (analysisComponent == nullptr)
@@ -125,13 +158,39 @@ void PluginEditor::updateAnalysisLayout()
     resized();
 }
 
-class Meter : public Slider
+class Meter : public Slider, private Timer
 {
 public:
+    Meter (const DSP::Parameter& parameterToDisplay, const AudioProcessor& processorToRead)
+        : parameter (parameterToDisplay), processor (processorToRead)
+    {
+        startTimerHz (30);
+    }
+
     String getTextFromValue (double value) override
     {
         return "";
     }
+
+private:
+    void timerCallback() override
+    {
+        float value;
+        {
+            // DSP writes do not send processor notifications. Take a short snapshot,
+            // skipping this frame if the audio callback is using the parameters.
+            const ScopedTryLock lock (processor.getCallbackLock());
+            if (! lock.isLocked())
+                return;
+
+            value = static_cast<float> (parameter);
+        }
+
+        setValue (value, dontSendNotification);
+    }
+
+    const DSP::Parameter& parameter;
+    const AudioProcessor& processor;
 };
 
 class Wheel : public Slider
@@ -178,7 +237,7 @@ void PluginEditor::setParameters(MiniPlugin::Parameters* pparams) {
         case DSP::Parameter::ROTARY:
         case DSP::Parameter::SLIDER:
         case DSP::Parameter::METER:
-        {   components.getReference(c) = parameter.type == DSP::Parameter::METER ? new ::Meter()
+        {   components.getReference(c) = parameter.type == DSP::Parameter::METER ? new ::Meter (parameter, *getAudioProcessor())
                                        : parameter.type == DSP::Parameter::WHEEL ? new Wheel()
                                        : new juce::Slider();
             juce::Slider* pSlider = (juce::Slider*)components[c];
