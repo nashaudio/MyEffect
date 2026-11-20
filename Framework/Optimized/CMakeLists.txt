@@ -24,10 +24,8 @@ target_include_directories(MyEffectHarness
 
 target_compile_definitions(MyEffectHarness
     PRIVATE
-    JUCE_GLOBAL_MODULE_SETTINGS_INCLUDED=1
-    JUCE_WEB_BROWSER=0
-    JUCE_USE_CURL=0
-    JUCE_VST3_CAN_REPLACE_VST2=0
-    PRODUCT_NAME_WITHOUT_VERSION="MyEffect")
+    # Inherit the plugin's JUCE settings, including its configuration-dependent
+    # DEBUG/NDEBUG definitions, without pulling in JUCE implementation sources.
+    $<TARGET_PROPERTY:MyEffect,COMPILE_DEFINITIONS>)
 
 target_compile_features(MyEffectHarness PRIVATE cxx_std_17)

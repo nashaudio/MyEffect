@@ -1042,7 +1042,10 @@ private:
             NotificationArea (StandalonePluginHolder& holderIn,
                               Button::Listener* settingsButtonListener,
                               std::function<void()> toolsCallbackIn)
-                : notification ("notification", "Audio input is muted to avoid feedback loop"),
+                : holder (holderIn),
+                  toolsCallback (std::move (toolsCallbackIn)),
+                  notification ("notification", "Audio input is muted to avoid feedback loop"),
+                  playButton ("Play"), stopButton ("Stop"), bypassButton ("Bypass"), toolsButton ("Tools"),
                  #if JUCE_IOS || JUCE_ANDROID
                   settingsButton ("Unmute Input")
                  #else

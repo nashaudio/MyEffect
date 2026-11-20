@@ -112,7 +112,7 @@ inline void LentPitShift::process()
   StkFloat x_t_T;  // previous input coefficient at T samples
   StkFloat coeff;  // new coefficient for the difference function
 
-  int alternativePitch = tMax_;  // Global minimum storage
+  int alternativePitch = (int)tMax_;  // Global minimum storage
   lastPeriod_ = tMax_+1;         // Storage of the lowest local minimum under the threshold
 
   // Loop variables
@@ -151,7 +151,7 @@ inline void LentPitShift::process()
       }
       else if ( dpt[alternativePitch] > dpt[delay_-1] )
         // Otherwise we store it if it is the current global minimum
-        alternativePitch = delay_-1;
+        alternativePitch = (int)(delay_-1);
     }
   }
 
@@ -160,7 +160,7 @@ inline void LentPitShift::process()
     if ( dpt[delay_] < threshold_ )
       lastPeriod_ = delay_;
     else if ( dpt[alternativePitch] > dpt[delay_] )
-      alternativePitch = delay_;
+      alternativePitch = (int)delay_;
   }
 
   if ( lastPeriod_ == tMax_+1 )
@@ -186,8 +186,8 @@ inline void LentPitShift::process()
       // Coefficients for the linear interpolation
       env[1] = fmod( outputPtr + tMax_, 1.0 );
       env[0] = 1.0 - env[1];
-      M = tMax_ - inputPtr + lastPeriod_ - 1; // New reading pointer
-      N = 2*tMax_ - (unsigned long)floor(outputPtr + tMax_) + lastPeriod_ - 1; // New writing pointer
+      M = int(tMax_ - inputPtr + lastPeriod_ - 1); // New reading pointer
+      N = int(2*tMax_ - (unsigned long)floor(outputPtr + tMax_) + lastPeriod_ - 1); // New writing pointer
       for ( unsigned int j=0; j<2*lastPeriod_; j++,M--,N-- ) {
         sample = inputLine_.tapOut(M) * window[j] / 2.;
         // Linear interpolation
